@@ -14,28 +14,28 @@ import * as swaggerUi from 'swagger-ui-express'
  *
  */
 const swaggerDefinition: swaggerJSDoc.SwaggerDefinition = {
-	openapi: '3.0.1',
-	info: {
-		title: 'Web scraping',
-		version: '1.0.1',
-		description: 'Web scraping documentation',
-	},
-	tags: [
-		{
-			name: 'Auth',
-			description: 'Authentication endpoints',
-		},
-	],
+  openapi: '3.0.1',
+  info: {
+    title: 'Web scraping',
+    version: '1.0.1',
+    description: 'Web scraping documentation',
+  },
+  tags: [
+    {
+      name: 'Auth',
+      description: 'Authentication endpoints',
+    },
+  ],
 }
 
 const options = {
-	swaggerDefinition,
-	apis: ['./src/controller/**/*.ts', './src/docs/*.yaml'],
+  swaggerDefinition,
+  apis: ['./src/controller/**/*.ts', './src/docs/*.yaml'],
 }
 
 const swaggerSpec = swaggerJSDoc(options)
 
 export default {
-	serve: swaggerUi.serve,
-	setup: swaggerUi.setup(swaggerSpec),
+  serve: swaggerUi.serve,
+  setup: swaggerUi.setup(swaggerSpec),
 }
