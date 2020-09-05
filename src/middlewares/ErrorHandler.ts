@@ -17,6 +17,7 @@ export class GlobalErrorHandler implements ExpressErrorMiddlewareInterface {
     next: (err: any) => any
   ) {
     if (error) {
+      console.log(error)
       const developmentMode = process.env.NODE_ENV === 'development'
       if (error instanceof HttpError) {
         return response.status(error.status).json({
