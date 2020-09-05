@@ -1,57 +1,54 @@
-import * as puppeteer from 'puppeteer'
+import * as cheerio from 'cheerio'
+import * as fetch from 'node-fetch'
 
 export class ScrapeService {
-	public async scrapeBuyPage(link = 'https://kodit.io/en/apartments-for-sale') {
-		const browser = await puppeteer.launch({headless: true})
-		try {
-			const page = await browser.newPage()
-			await page.goto(`${link}`, {waitUntil: 'networkidle0'})
-			const countryLinks = await page.evaluate(() => {
-				const elements = Array.from(document.querySelectorAll('a.City-Link--Country')) as HTMLAnchorElement[]
-				return elements.map(el => el.href)
+	public async scrapeBuyPage(baseUrl = 'https://kodit.io', link = 'https://kodit.io/en/apartments-for-sale') {
+		const htmlResponse = await fetch(link)
+		const rawHtml = await htmlResponse.text()
+		const $ = cheerio.load(rawHtml)
+		const countryLinks = $('div.City-List').find('a.City-Link--Country').toArray().map(node => {
+			return {
+				text: $(node).text(),
+				url: `${baseUrl}${$(node).attr('href')}`
+			}
+		})
+		return Promise.all(countryLinks.map(async countryLink => {
+			const countryHtmlResponse = await fetch(countryLink.url)
+			const rawCountryHtml = await countryHtmlResponse.text()
+			const page$ = cheerio.load(rawCountryHtml)
+			const apartmentLinks = page$('div.Grid').find('a.Apartment-Card').toArray().map(node => {
+				return `${baseUrl}${page$(node).attr('href')}`
 			})
-			console.log(countryLinks)
-			const res = await Promise.all(countryLinks.map(async countryLink => {
-				const newPage = await browser.newPage()
-				await newPage.goto(countryLink), {waitUntil: 'networkidle0'}
-				const apartmentLinks = await page.evaluate(() => {
-					const elements = Array.from(document.querySelectorAll('a.Apartment-Card')) as HTMLAnchorElement[]
-					return elements.map(el => el.href)
-				})
-				console.log(apartmentLinks)
-				const allApartmentsInfo = await Promise.all(apartmentLinks.map(async apartmentLink => {
-					const apartmentPage = await browser.newPage()
-					await apartmentPage.goto(apartmentLink, {waitUntil: 'networkidle0'})
-					const apartmentInfo = await page.evaluate(() => {
-						const streetAddress = document.querySelector('h1.Place-Header').innerHTML
-						const description = document.querySelector('h1.Place-Header').innerHTML
-						const builtYear = document.querySelector('ul.apartmentHighlights > li:nth-child(3)').innerHTML
-						const sizeSqm = document.querySelector('p.Place-Rooms').innerHTML
-						const balcony = document.querySelector('ul.apartmentHighlights > li:nth-child(2)').innerHTML
-						const roomCount = document.querySelector('p.Place-Rooms').innerHTML
-						const priceSqm = document.querySelector('h2.Place-Price').innerHTML
-						return {
-							streetAddress,
-							description,
-							builtYear,
-							sizeSqm,
-							balcony,
-							roomCount,
-							priceSqm,
-						}
-					})
-					await apartmentPage.close()
-					return apartmentInfo
-				}))
-				await newPage.close()
-				return allApartmentsInfo
+			const data = await Promise.all(apartmentLinks.map(async apartmentLink => {
+				const htmlApartmentResponse = await fetch(apartmentLink)
+				const rawApartmentHtml = await htmlApartmentResponse.text()
+				const apartment$ = cheerio.load(rawApartmentHtml)
+				const streetAddress = apartment$('h1.Place-Heading').text().split(' ')
+				const street = streetAddress[0]
+				const streetNumber = !isNaN(Number(streetAddress[1])) ? Number(streetAddress[1]) : -1
+				const description = apartment$('p.Place-Details').text()
+				const builtYear = apartment$('ul.apartmentHighlights > li:nth-child(3)').text().includes('Built') ? apartment$('ul.apartmentHighlights > li:nth-child(3)').text() : apartment$('ul.apartmentHighlights > li:nth-child(2)').text()
+				const placeRooms = apartment$('p.Place-Rooms').text().split(' ')
+				const sizeSqm = Number(placeRooms[0])
+				const balcony = apartment$('ul.apartmentHighlights > li:nth-child(2)').text().includes('Balcony') ? 1 : 0
+				const roomCount = Number(placeRooms[3])
+				const priceSqm = Number(apartment$('h2.Place-Price', 'div.Price-Card__Price-Data').text().split('€')[1].trim().split(' ').join('')) / sizeSqm
+				return {
+					street,
+					streetNumber,
+					description,
+					built_year: builtYear,
+					size_sqm: sizeSqm,
+					balcony,
+					room_count: roomCount,
+					price_sqm: priceSqm,
+				}
 			}))
-			return res
-		} catch (e) {
-			throw e
-		} finally {
-			await browser.close()
-		}
+			return {
+				data,
+				country: countryLink.text,
+			}
+		}))
 
 	}
 }
