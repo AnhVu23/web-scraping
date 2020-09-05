@@ -1,0 +1,143 @@
+# User components for swagger
+#
+# @author Anh Vu <anh.vu@vertics.co>
+#
+# @copyright Vertics Oy 2020
+#
+components:
+  # Reusable schemas, can be referenced as #/components/schemas/{schemas-name}
+  schemas:
+    AvailableTime:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        label:
+          type: string
+          example: ALL_TIMES
+        value:
+          type: string
+          example: 0
+    AvailableTimesArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/AvailableTime'
+    Language:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        label:
+          type: string
+          example: Finnish
+    UserLanguage:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        language:
+          $ref: '#/components/schemas/Language'
+        skillLevel:
+          type: string
+          example: native
+    UserLanguageArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserLanguage'
+    City:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: Helsinki
+    CityArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/City'
+    DriverLicense:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        class:
+          type: string
+          example: 'A'
+    DriverLicenseArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/DriverLicense'
+    Role:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: Host
+          enum: ["ASSIGNED", "REQUESTED", "USER_ACCEPTED", "USER_REJECTED", "ADMIN_ACCEPTED", "ADMIN_REJECTED"]
+
+  # Reusable request bodies: #components/requestBodies/{request-name}
+  requestBodies:
+    City:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Vaasa
+    ChangePassword:
+      type: object
+      properties:
+        password:
+          type: string
+          example: Password123
+  # Reusable schemas, can be referenced as #/components/responses/{response-name}
+  responses:
+    204:
+      description: The request is successful, and no content will be sent
+    400:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    401:
+      description: Missing access token, invalid access token or invalid refresh token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    403:
+      description: Invalid permission/role to access the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    404:
+      description: Could not find entity by id
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    409:
+      description: Conflict with other entities when making a request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    500:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+
+
+
