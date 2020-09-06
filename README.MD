@@ -1,39 +1,22 @@
-# POKKA
+# Web scraping
 
-##Installation
+## Explaination
 
-1. Install [yarn](https://yarnpkg.com/en/) by `brew install yarn`
-2. Install postgresql
-    * `brew install postgresql`
-    * `start postgresql`
-3. Create Database
-    * `createdb pokka-dev` and `createdb pokka-production` (or what's configured in ormconfig.json)
-    * If you face problems with database connection when running, try your unix username as database username. Password might also be "postgres"
-4. Add global requirements by `yarn global add ts-node typeorm tsc` (node bundled with typescript transpiler, typeorm and typescript transpiler)
-5. Run `yarn install && yarn run start`
+There are 2 viable tools for scraping data using NodeJS: [Puppeteer](https://github.com/puppeteer/puppeteer) and [Cheerio](https://github.com/cheeriojs/cheerio). Puppeteer is a powerful tool made by Google, while Cheerio was maintained by cheeriojs community. Both tools are doing great work in terms of web scraping. However, I decided to go with Cheerio because it works best for my case. Cheerio is faster compared to Puppeteer because it does not need to use chromium when parsing HTML. Besides, I does not need to run Javascript, which is Puppeteer's important feature, when scraping.
 
-## Core technologies
+After parsing data from [kodit.io](https://kodit.io/en/apartments-for-sale/), I integrate them with third party APIs, then returning a full analyzed data to client.
 
-Roughly knowing what are the capabilities and roles of each is mandatory for understanding and developing the software
+## Installation
+1. Clone project: ``git clone https://github.com/anhvu-95/web-scraping.git``
+2. Open project, and run ``yarn install`` or ``npm install``
+3. Run ``yarn dev`` to start local server.
 
-* [Node](https://nodejs.org)
-* [PostgreSQL](https://www.postgresql.org) Database
-* [TypeORM](https://typeorm.io) ORM
-* [rounting-controllers](https://github.com/typestack/routing-controllers) simplifying [Express](http://expressjs.com) routings with decorators
-  * [socket-controllers](https://github.com/typestack/socket-controllers) Handlind websockets
-* [Typescript](http://www.typescriptlang.org)
-* [class-transformer](https://github.com/typestack/class-transformer)
+##Usage
 
-See package.json for more.
+#Live demo: [https://web-scraping-sandbox.herokuapp.com/](https://web-scraping-sandbox.herokuapp.com/)
+Check documetation [here](https://web-scraping-sandbox.herokuapp.com/api-docs/)
 
-### Tests
+##Technology
 
-TBW/TODO
-
-### Production
-
-TBW
-
-###TODO
-
-- ts-node-dev
+1. NodeJS/Express
+2. Cheerio
