@@ -15,10 +15,26 @@ export class ScrapeController {
 		this.ScrapeService = new ScrapeService()
 	}
 
+	/**
+	 * @swagger
+	 * /scrape/buy:
+	 *  get:
+	 *    tags:
+	 *      - Scrape
+	 *    summary: Get all apartments' analyzed information.
+	 *    responses:
+	 *      200:
+	 *        $ref: '#/components/responses/GetBuyScrape'
+	 *      500:
+	 *        $ref: '#/components/responses/500'
+	 *
+	 *
+	 */
+
 	@Get('/buy')
 	public async scrapingBuyPage() {
 		try {
-			const [scrapeData, thirdPartyTransactions] = await Promise.all([this.ScrapeService.scrapeBuyPage(), this.ExternalApiService.gettingTransactions()])
+			const [scrapeData, thirdPartyTransactions] = await Promise.all([this.ScrapeService.scrapeBuyPage('https://kodit.io', 'https://kodit.io/en/apartments-for-sale'), this.ExternalApiService.gettingTransactions()])
 			return this.populateScrapeData(scrapeData, thirdPartyTransactions)
 		} catch (e) {
 			throw e

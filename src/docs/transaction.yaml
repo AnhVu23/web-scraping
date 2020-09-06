@@ -1,0 +1,116 @@
+# Reusable components for swagger
+#
+# @author Anh Vu <anh.vu@vertics.co>
+#
+# @copyright Vertics Oy 2020
+#
+components:
+  # Reusable schemas, can be referenced as #/components/schemas/{schemas-name}
+  schemas:
+    Transaction:
+        type: object
+        properties:
+          street:
+            type: string
+            example: Maininkitie
+          street_number:
+            type: number
+            example: 9
+          description:
+            type: string
+            example: Kitchen, 2 bedrooms, Bathroom, Living room, Walk-in closet
+          built_year:
+            type: number
+            example: 1973
+          size_sqm:
+            type: number
+            example: 76.5
+          balcony:
+            type: number
+            example: 1
+          room_count:
+            type: number
+            example: 3
+          price_sqm:
+            type: number
+            example: 2930.0342
+
+    TransactionAnalysis:
+      type: object
+      properties:
+        same_street_trans:
+          type: number
+          example: 8
+        same_street_and_room_trans:
+          type: number
+          example: 5
+        same_street_and_room_avg_diff:
+          type: number
+          example: -27.64
+        same_street_and_room_and_built_year_trans:
+          type: number
+          example: 0
+        same_street_and_room_and_built_year_avg_diff:
+          type: number
+          example: 0
+        same_street_and_room_and_balcony_trans:
+          type: number
+          example: 5
+        same_street_and_room_and_balcony_avg_diff:
+          type: number
+          example: 8
+        same_address_trans:
+          type: number
+          example: 8
+        same_address_avg_diff:
+          type: number
+          example: -24.93
+        same_address_and_room_trans:
+          type: number
+          example: 5
+        same_address_and_room_avg_diff:
+          type: number
+          example: -27.64
+        same_address_and_room_and_built_year_trans:
+          type: number
+          example: 0
+        same_address_and_room_and_built_year_avg_diff:
+          type: number
+          example: 0
+        same_address_and_room_and_balcony_trans:
+          type: number
+          example: 5
+        same_address_and_room_and_balcony_avg_diff:
+          type: number
+          example: -27.64
+
+    AnalyzedTransaction:
+      allOf:
+      - $ref: '#/components/schemas/Transaction'
+      - $ref: '#/components/schemas/TransactionAnalysis'
+
+
+  # Reusable request bodies: #/components/requestBodies/{request-name}
+
+  # Reusable schemas, can be referenced as #/components/responses/{response-name}
+  responses:
+    GetBuyScrape:
+      description: An array of aparments with analyzed information from third party source.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                country:
+                  type: string
+                  example: Finland
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/AnalyzedTransaction'
+
+
+
+
