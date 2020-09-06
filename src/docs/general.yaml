@@ -1,0 +1,33 @@
+# User components for swagger
+#
+# @author Anh Vu <anh.vu@vertics.co>
+#
+# @copyright Vertics Oy 2020
+#
+components:
+  # Reusable schemas, can be referenced as #/components/schemas/{schemas-name}
+  schemas:
+    ErrorMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Something went wrong!
+        code:
+          type: number
+          example: 2003
+
+  # Reusable request bodies: #components/requestBodies/{request-name}
+  requestBodies:
+
+  # Reusable schemas, can be referenced as #/components/responses/{response-name}
+  responses:
+    500:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+
+
+
