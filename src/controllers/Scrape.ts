@@ -1,4 +1,4 @@
-import {Get, JsonController} from 'routing-controllers'
+import {Get, JsonController, Res} from 'routing-controllers'
 import {ExternalApiService} from '../services/ExternalApi'
 import {ScrapeService} from '../services/Scrape'
 import {IAnalyzedTransactionScrape, ITransactionScrape} from '../interfaces/ITransactionScrape'
@@ -49,10 +49,10 @@ export class ScrapeController {
 				this.populateDataToObject(analyzedTrans, ['same_street_and_room_trans', 'same_street_and_room_avg_diff'], transactions, analyzedTrans, ['street', 'room_count'])
 				this.populateDataToObject(analyzedTrans, ['same_street_and_room_and_built_year_trans', 'same_street_and_room_and_built_year_avg_diff'], transactions, analyzedTrans, ['street', 'room_count', 'built_year'])
 				this.populateDataToObject(analyzedTrans, ['same_street_and_room_and_balcony_trans', 'same_street_and_room_and_balcony_avg_diff'], transactions, analyzedTrans, ['street', 'room_count', 'balcony'])
-				this.populateDataToObject(analyzedTrans, ['same_address_trans', 'same_address_avg_diff'], transactions, analyzedTrans,  ['street', 'street_number'])
-				this.populateDataToObject(analyzedTrans, ['same_address_and_room_trans', 'same_address_and_room_avg_diff'], transactions, analyzedTrans,  ['street', 'street_number', 'room_count'])
-				this.populateDataToObject(analyzedTrans, ['same_address_and_room_and_built_year_trans', 'same_address_and_room_and_built_year_avg_diff'], transactions, analyzedTrans,  ['street', 'street_number', 'room_count', 'built_year'])
-				this.populateDataToObject(analyzedTrans, ['same_address_and_room_and_balcony_trans', 'same_address_and_room_and_balcony_avg_diff'], transactions, analyzedTrans,  ['street', 'street_number', 'room_count', 'balcony'])
+				this.populateDataToObject(analyzedTrans, ['same_address_trans', 'same_address_avg_diff'], transactions, analyzedTrans, ['street', 'street_number'])
+				this.populateDataToObject(analyzedTrans, ['same_address_and_room_trans', 'same_address_and_room_avg_diff'], transactions, analyzedTrans, ['street', 'street_number', 'room_count'])
+				this.populateDataToObject(analyzedTrans, ['same_address_and_room_and_built_year_trans', 'same_address_and_room_and_built_year_avg_diff'], transactions, analyzedTrans, ['street', 'street_number', 'room_count', 'built_year'])
+				this.populateDataToObject(analyzedTrans, ['same_address_and_room_and_balcony_trans', 'same_address_and_room_and_balcony_avg_diff'], transactions, analyzedTrans, ['street', 'street_number', 'room_count', 'balcony'])
 				return analyzedTrans
 			})
 			return item

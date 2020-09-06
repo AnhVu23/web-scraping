@@ -13,7 +13,6 @@ import { ScrapeController } from './controllers/Scrape'
 // Middlewares
 import swagger from './config/swagger'
 import { GlobalErrorHandler } from './middlewares/ErrorHandler'
-import {Request, Response} from 'express'
 
 export default class App {
   private app: express.Application
@@ -92,9 +91,6 @@ export default class App {
     /**
      * Setting routes
      */
-    this.app.use('/', (req: Request, res: Response) => {
-      return res.status(200).send('Scraping is awesome')
-    })
 
     useExpressServer(this.app, {
       classTransformer: true,
