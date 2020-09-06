@@ -17,7 +17,7 @@ const swaggerDefinition: swaggerJSDoc.SwaggerDefinition = {
   openapi: '3.0.1',
   info: {
     title: 'Web scraping',
-    version: '1.0.1',
+    version: '1.0.0',
     description: 'Web scraping documentation',
   },
   tags: [
@@ -25,7 +25,7 @@ const swaggerDefinition: swaggerJSDoc.SwaggerDefinition = {
       name: 'Scrape',
       description: 'Scrape related endpoints',
     },
-  ],
+  ]
 }
 
 const options = {
