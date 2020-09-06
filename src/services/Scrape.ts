@@ -1,8 +1,9 @@
 import * as cheerio from 'cheerio'
 import * as fetch from 'node-fetch'
+import {ITransactionScrape} from '../interfaces/ITransactionScrape'
 
 export class ScrapeService {
-	public async scrapeBuyPage(baseUrl = 'https://kodit.io', link = 'https://kodit.io/en/apartments-for-sale') {
+	public async scrapeBuyPage(baseUrl = 'https://kodit.io', link = 'https://kodit.io/en/apartments-for-sale'): Promise<ITransactionScrape[]> {
 		const htmlResponse = await fetch(link)
 		const rawHtml = await htmlResponse.text()
 		const $ = cheerio.load(rawHtml)
@@ -35,7 +36,7 @@ export class ScrapeService {
 				const priceSqm = Number(apartment$('h2.Place-Price', 'div.Price-Card__Price-Data').text().split('€')[1].trim().split(' ').join('')) / sizeSqm
 				return {
 					street,
-					streetNumber,
+					street_number: streetNumber,
 					description,
 					built_year: builtYear,
 					size_sqm: sizeSqm,
@@ -45,10 +46,9 @@ export class ScrapeService {
 				}
 			}))
 			return {
-				data,
 				country: countryLink.text,
+				data,
 			}
 		}))
-
 	}
 }
