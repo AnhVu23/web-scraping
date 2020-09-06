@@ -22,15 +22,15 @@ const swaggerDefinition: swaggerJSDoc.SwaggerDefinition = {
   },
   tags: [
     {
-      name: 'Auth',
-      description: 'Authentication endpoints',
+      name: 'Scrape',
+      description: 'Scrape related endpoints',
     },
   ],
 }
 
 const options = {
   swaggerDefinition,
-  apis: ['./src/controller/**/*.ts', './src/docs/*.yaml'],
+  apis: ['./src/controllers/**/*.ts', './src/docs/*.yaml'],
 }
 
 const swaggerSpec = swaggerJSDoc(options)
