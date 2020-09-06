@@ -28,10 +28,17 @@ export class ScrapeService {
 				const street = streetAddress[0]
 				const streetNumber = !isNaN(Number(streetAddress[1])) ? Number(streetAddress[1]) : -1
 				const description = apartment$('p.Place-Details').text()
-				const builtYear = apartment$('ul.apartmentHighlights > li:nth-child(3)').text().includes('Built') ? apartment$('ul.apartmentHighlights > li:nth-child(3)').text() : apartment$('ul.apartmentHighlights > li:nth-child(2)').text()
+				const nodeBuiltYearArray = apartment$('ul.apartmentHighlights').find('li').toArray().filter(node => {
+					return apartment$(node).text().includes('Built')
+				})
+				const builtYear = nodeBuiltYearArray.length > 0 ? Number(apartment$(nodeBuiltYearArray[0]).text().split(' ')[1]) : ''
+
 				const placeRooms = apartment$('p.Place-Rooms').text().split(' ')
 				const sizeSqm = Number(placeRooms[0])
-				const balcony = apartment$('ul.apartmentHighlights > li:nth-child(2)').text().includes('Balcony') ? 1 : 0
+				const nodeBalconyArray = apartment$('ul.apartmentHighlights').find('li').toArray().filter(node => {
+					return apartment$(node).text().includes('Balcony')
+				})
+				const balcony = nodeBalconyArray.length
 				const roomCount = Number(placeRooms[3])
 				const priceSqm = Number(apartment$('h2.Place-Price', 'div.Price-Card__Price-Data').text().split('€')[1].trim().split(' ').join('')) / sizeSqm
 				return {
